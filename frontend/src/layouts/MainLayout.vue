@@ -29,7 +29,8 @@ export default {
     isOpen: true,
   }),
   components: {
-    Navbar, Sidebar,
+    Navbar,
+    Sidebar,
   },
 };
 </script>
