@@ -8,10 +8,16 @@
           type="text"
           class="validate"
           v-model.trim="email"
-          :class="{invalid: ($v.email.$dirty && $v.email.required) || $v.email.email}"
+          :class="{invalid: ($v.email.$dirty && $v.email.required)
+          || ($v.email.$dirty && $v.email.email)}"
         >
         <label for="email">Email</label>
-        <small class="helper-text invalid">Email</small>
+        <small class="helper-text invalid"
+               v-if="$v.email.$dirty && !$v.email.required"
+        >Поле Email должнл быть заполнено</small>
+        <small class="helper-text invalid"
+               v-else-if="$v.email.$dirty && !$v.email.email"
+        >Поле Email должнл быть заполнено</small>
       </div>
       <div class="input-field">
         <input
@@ -66,9 +72,8 @@ export default {
     submitHandler() {
       if (this.$v.invalid) {
         this.$v.$touch();
-        return;
       }
-      this.$router.push('/');
+      // this.$router.push('/');
     },
   },
 };
