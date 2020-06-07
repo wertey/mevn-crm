@@ -48,7 +48,9 @@
 
       <p class="center">
         Уже есть аккаунт?
-        <a href="/">Войти!</a>
+        <a href="/"
+           @click.prevent="login"
+        >Войти!</a>
       </p>
     </div>
   </form>
@@ -57,6 +59,11 @@
 <script>
 export default {
   name: 'Register',
+  methods: {
+    login() {
+      this.$router.push('/login');
+    },
+  },
 };
 </script>
 
