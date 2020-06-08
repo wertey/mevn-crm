@@ -1,36 +1,71 @@
 <template>
-  <form class="card auth-card">
+  <form class="card auth-card"
+        @submit.prevent="submitHandler"
+  >
     <div class="card-content">
       <span class="card-title">Домашняя бухгалтерия</span>
       <div class="input-field">
         <input
           id="email"
           type="text"
+          class="validate"
+          v-model.trim="email"
+          :class="{invalid: ($v.email.$dirty && $v.email.required)
+          || ($v.email.$dirty && $v.email.email)}"
         >
         <label for="email">Email</label>
-        <small class="helper-text invalid">Email</small>
+        <small class="helper-text invalid"
+               v-if="$v.email.$dirty && !$v.email.required"
+        >Поле Email должнл быть заполнено</small>
+        <small class="helper-text invalid"
+               v-else-if="$v.email.$dirty && !$v.email.email"
+        >Введите корректный Email</small>
       </div>
       <div class="input-field">
         <input
           id="password"
           type="password"
           class="validate"
+          v-model.trim="password"
+          :class="{invalid: ($v.password.$dirty && $v.password.required) || $v.password.minLength}"
         >
         <label for="password">Пароль</label>
-        <small class="helper-text invalid">Password</small>
+        <small class="helper-text invalid"
+               v-if="$v.password.$dirty && !$v.password.required"
+        >Поле Password должно быть заполнено</small>
+        <small class="helper-text invalid"
+               v-else-if="$v.password.$dirty && !$v.password.minLength"
+        >Поле Password должно содержать минимум
+          {{ $v.password.$params.minLength.min }}
+          символов. Сейчас он
+          {{ password.length }}
+        </small>
       </div>
       <div class="input-field">
         <input
           id="name"
           type="text"
           class="validate"
+          v-model.trim="name"
+          :class="{invalid: ($v.password.$dirty && $v.password.required) || $v.password.minLength}"
         >
         <label for="name">Имя</label>
-        <small class="helper-text invalid">Name</small>
+        <small class="helper-text invalid"
+               v-if="$v.name.$dirty && !$v.name.required"
+        >Поле Password должно быть заполнено</small>
+        <small class="helper-text invalid"
+               v-else-if="$v.name.$dirty && !$v.name.minLength"
+        >Поле имя должно содержать минимум
+          {{ $v.name.$params.minLength.min }}
+          символов. Сейчас он
+          {{ name.length }}
+        </small>
       </div>
       <p>
         <label>
-          <input type="checkbox" />
+          <input type="checkbox"
+                 v-model="rule"
+          />
           <span>С правилами согласен</span>
         </label>
       </p>
@@ -57,11 +92,37 @@
 </template>
 
 <script>
+import { email, required, minLength } from 'vuelidate/lib/validators';
+
 export default {
   name: 'Register',
+  data: () => ({
+    email: '',
+    password: '',
+    name: '',
+    rule: false,
+  }),
+  validations: {
+    email: { email, required },
+    password: { required, minLength: minLength(6) },
+    name: { required, minLength: minLength(2) },
+  },
   methods: {
     login() {
       this.$router.push('/login');
+    },
+    submitHandler() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+      }
+      const formData = {
+        email: this.email,
+        password: this.password,
+        name: this.name,
+        rules: this.rule,
+      };
+      console.log('formData', formData);
+      // this.$router.push('/');
     },
   },
 };

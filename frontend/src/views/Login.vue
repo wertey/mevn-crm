@@ -17,7 +17,7 @@
         >Поле Email должнл быть заполнено</small>
         <small class="helper-text invalid"
                v-else-if="$v.email.$dirty && !$v.email.email"
-        >Поле Email должнл быть заполнено</small>
+        >Введите корректный Email</small>
       </div>
       <div class="input-field">
         <input
@@ -28,7 +28,16 @@
           :class="{invalid: ($v.password.$dirty && $v.password.required) || $v.password.minLength}"
         >
         <label for="password">Пароль</label>
-        <small class="helper-text invalid">Password</small>
+        <small class="helper-text invalid"
+               v-if="$v.password.$dirty && !$v.password.required"
+        >Поле Password должно быть заполнено</small>
+        <small class="helper-text invalid"
+               v-else-if="$v.password.$dirty && !$v.password.minLength"
+        >Поле Password должно содержать минимум
+          {{ $v.password.$params.minLength.min }}
+          символов. Сейчас он
+          {{ password.length }}
+        </small>
       </div>
     </div>
     <div class="card-action">
@@ -70,9 +79,14 @@ export default {
       this.$router.push('/register');
     },
     submitHandler() {
-      if (this.$v.invalid) {
+      if (this.$v.$invalid) {
         this.$v.$touch();
       }
+      const formData = {
+        email: this.email,
+        password: this.password,
+      };
+      console.log('formData', formData);
       // this.$router.push('/');
     },
   },
