@@ -95,6 +95,8 @@
 import { email, required, minLength } from 'vuelidate/lib/validators';
 import userApi from '../api/UserApi';
 
+const generateUniqueId = require('generate-unique-id');
+
 export default {
   name: 'Register',
   data: () => ({
@@ -102,6 +104,7 @@ export default {
     password: '',
     name: '',
     rule: false,
+    token: null,
   }),
   validations: {
     email: { email, required },
@@ -112,9 +115,11 @@ export default {
     login() {
       this.$router.push('/login');
     },
+    // eslint-disable-next-line consistent-return
     submitHandler() {
       if (this.$v.$invalid) {
         this.$v.$touch();
+        return false;
       }
       const formData = {
         email: this.email,
@@ -122,8 +127,19 @@ export default {
         name: this.name,
         rules: this.rule,
       };
-      userApi.sendSignUp(formData);
-      // this.$router.push('/');
+      console.log('formData', formData);
+      userApi.sendSignUp(formData).then((resp) => {
+        console.log('resp', resp);
+        this.token = generateUniqueId({
+          includeSymbols: ['@', '#', '|'],
+          excludeSymbols: ['0'],
+          length: 32,
+        });
+        localStorage.setItem('token', JSON.stringify(this.token));
+        this.$router.push('/');
+      }).catch((err) => {
+        console.error(err);
+      });
     },
   },
 };

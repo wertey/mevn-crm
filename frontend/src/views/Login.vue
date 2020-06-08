@@ -62,8 +62,8 @@
 </template>
 
 <script>
-import userApi from '../api/UserApi';
 import { email, required, minLength } from 'vuelidate/lib/validators';
+import userApi from '../api/UserApi';
 
 export default {
   name: 'Login',
@@ -79,12 +79,17 @@ export default {
     register() {
       this.$router.push('/register');
     },
+    // eslint-disable-next-line consistent-return
     submitHandler() {
       if (this.$v.$invalid) {
         this.$v.$touch();
+        return false;
       }
-      userApi.sendLogin(this.email, this.password);
-      // this.$router.push('/');
+      userApi.sendLogin(this.email, this.password).then(() => {
+        this.$router.push('/');
+      }).catch((err) => {
+        console.error(err);
+      });
     },
   },
 };
