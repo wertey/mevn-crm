@@ -9,7 +9,7 @@ const options = {
     customJs: '/custom.js'
   };
 
-mongoose.connect('mongodb://localhost:27017/sales-funnels', {
+mongoose.connect('mongodb://localhost:27017/crm', {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -27,7 +27,8 @@ app.use(cors());
 const port = process.env.PORT || 8080
 app.use(express.json())
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
-app.use('/order', router.emailsRouter);
+app.use('/goods', router.goodsRouter);
+app.use('/auth', router.userRouter);
 
 app.use('/', (req, res) => {
     res.send(`server is on port ${port}`)

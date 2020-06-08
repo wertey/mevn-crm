@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import userApi from '../api/UserApi';
 import { email, required, minLength } from 'vuelidate/lib/validators';
 
 export default {
@@ -82,11 +83,7 @@ export default {
       if (this.$v.$invalid) {
         this.$v.$touch();
       }
-      const formData = {
-        email: this.email,
-        password: this.password,
-      };
-      console.log('formData', formData);
+      userApi.sendLogin(this.email, this.password);
       // this.$router.push('/');
     },
   },

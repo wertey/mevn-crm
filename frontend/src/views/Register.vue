@@ -93,6 +93,7 @@
 
 <script>
 import { email, required, minLength } from 'vuelidate/lib/validators';
+import userApi from '../api/UserApi';
 
 export default {
   name: 'Register',
@@ -121,7 +122,7 @@ export default {
         name: this.name,
         rules: this.rule,
       };
-      console.log('formData', formData);
+      userApi.sendSignUp(formData);
       // this.$router.push('/');
     },
   },
