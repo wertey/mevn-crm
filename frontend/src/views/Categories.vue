@@ -79,8 +79,11 @@
 </template>
 
 <script>
+import localStorageToken from '../mixins/localStorageToken';
+
 export default {
   name: 'Categories',
+  mixins: [localStorageToken],
 };
 </script>
 

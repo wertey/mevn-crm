@@ -23,8 +23,11 @@
 </template>
 
 <script>
+import localStorageToken from '../mixins/localStorageToken';
+
 export default {
   name: 'Planning',
+  mixins: [localStorageToken],
 };
 </script>
 

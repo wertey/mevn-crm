@@ -10,7 +10,7 @@ export default {
     });
     return instWithCred.post('/', user);
   },
-  sendLogin(login, password) {
+  sendLogin(email, password) {
     const token = JSON.parse(localStorage.getItem('token'));
     const instWithCred = axios.create({
       baseURL: domains.USER_LOG_IN,
@@ -18,6 +18,6 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     });
-    return instWithCred.post('login', { login, password });
+    return instWithCred.post('login', { email, password });
   },
 };

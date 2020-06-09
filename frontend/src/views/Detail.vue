@@ -26,8 +26,11 @@
 </template>
 
 <script>
+import localStorageToken from '../mixins/localStorageToken';
+
 export default {
   name: 'Detail',
+  mixins: [localStorageToken],
 };
 </script>
 

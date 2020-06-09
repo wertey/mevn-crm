@@ -43,8 +43,11 @@
 </template>
 
 <script>
+import localStorageToken from '../mixins/localStorageToken';
+
 export default {
   name: 'History',
+  mixins: [localStorageToken],
 };
 </script>
 
