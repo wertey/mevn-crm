@@ -62,8 +62,8 @@ export default {
   }),
   methods: {
     logout() {
-      console.log('logout');
-      this.$router.push('/login?message=logout');
+      localStorage.removeItem('token');
+      this.$router.push('/login');
     },
   },
   mounted() {
