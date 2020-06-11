@@ -8,55 +8,48 @@
       </button>
     </div>
 
-    <div class="row">
-      <div class="col s12 m6 l4">
-        <div class="card light-blue bill-card">
-          <div class="card-content white-text">
-            <span class="card-title">Счет в валюте</span>
+    <LoaderTemplate v-if="loading"/>
 
-            <p class="currency-line">
-              <span>12.0 Р</span>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col s12 m6 l8">
-        <div class="card orange darken-3 bill-card">
-          <div class="card-content white-text">
-            <div class="card-header">
-              <span class="card-title">Курс валют</span>
-            </div>
-            <table>
-              <thead>
-              <tr>
-                <th>Валюта</th>
-                <th>Курс</th>
-                <th>Дата</th>
-              </tr>
-              </thead>
-
-              <tbody>
-              <tr>
-                <td>руб</td>
-                <td>12121</td>
-                <td>12.12.12</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+    <div class="row"
+         v-else
+    >
+      <HomeBill :currency="currency"/>
+      <HomeCurrent :date="date"
+                   :currency="currency"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import localStorageToken from '../mixins/localStorageToken';
+import CurrencyApi from '../api/CurrencyApi';
+import HomeBill from '../components/HomeBill.vue';
+import HomeCurrent from '../components/HomeCurrent.vue';
 
 export default {
   name: 'Home',
+  data: () => ({
+    loading: true,
+    currency: null,
+    date: '',
+    currencies: ['RUB', 'USD', 'EUR', 'BYN'],
+  }),
   mixins: [localStorageToken],
+  components: {
+    HomeCurrent,
+    HomeBill,
+  },
+  async mounted() {
+    await CurrencyApi.getFixerCurrency().then((resp) => {
+      this.currency = resp.data.rates;
+      this.date = resp.data.date;
+    })
+      .catch((e) => {
+        console.log(e);
+      });
+    this.loading = false;
+  },
 };
 </script>
 

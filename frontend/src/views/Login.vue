@@ -63,6 +63,7 @@
 
 <script>
 import { email, required, minLength } from 'vuelidate/lib/validators';
+import { mapMutations } from 'vuex';
 import userApi from '../api/UserApi';
 
 export default {
@@ -70,12 +71,14 @@ export default {
   data: () => ({
     email: '',
     password: '',
+    token: '',
   }),
   validations: {
     email: { email, required },
     password: { required, minLength: minLength(6) },
   },
   methods: {
+    ...mapMutations(['SET_USER_NAME']),
     register() {
       this.$router.push('/register');
     },
@@ -85,7 +88,11 @@ export default {
         this.$v.$touch();
         return false;
       }
-      userApi.sendLogin(this.email, this.password).then(() => {
+      userApi.sendLogin(this.email, this.password).then((resp) => {
+        const userInfo = resp.data.user;
+        this.token = userInfo.tokens[userInfo.tokens.length - 1].token;
+        localStorage.setItem('token', JSON.stringify(this.token));
+        this.SET_USER_NAME(userInfo);
         this.$router.push('/');
       }).catch((err) => {
         console.error(err);

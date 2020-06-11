@@ -93,6 +93,7 @@
 
 <script>
 import { email, required, minLength } from 'vuelidate/lib/validators';
+import { mapMutations } from 'vuex';
 import userApi from '../api/UserApi';
 
 const generateUniqueId = require('generate-unique-id');
@@ -112,6 +113,7 @@ export default {
     name: { required, minLength: minLength(2) },
   },
   methods: {
+    ...mapMutations(['SET_USER_NAME']),
     login() {
       this.$router.push('/login');
     },
@@ -126,15 +128,15 @@ export default {
         password: this.password,
         name: this.name,
         rules: this.rule,
+        bill: 1000,
       };
-      console.log('formData', formData);
-      userApi.sendSignUp(formData).then((resp) => {
-        console.log('resp', resp);
+      userApi.sendSignUp(formData).then(() => {
         this.token = generateUniqueId({
           includeSymbols: ['@', '#', '|'],
           excludeSymbols: ['0'],
           length: 32,
         });
+        this.SET_USER_NAME(formData);
         localStorage.setItem('token', JSON.stringify(this.token));
         this.$router.push('/');
       }).catch((err) => {

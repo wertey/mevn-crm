@@ -18,7 +18,7 @@
               data-target="dropdown"
               ref="dropdown"
           >
-            USER NAME
+            {{ userName }}
             <i class="material-icons right">arrow_drop_down</i>
           </a>
 
@@ -60,6 +60,11 @@ export default {
     interval: null,
     dropdown: null,
   }),
+  computed: {
+    userName() {
+      return this.$store.getters.info.name;
+    },
+  },
   methods: {
     logout() {
       localStorage.removeItem('token');

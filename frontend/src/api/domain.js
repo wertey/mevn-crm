@@ -1,4 +1,5 @@
 export const CURRENT_SERVER = 'http://localhost:3000';
+export const FIXER_CURRENCY_SERVER = 'http://data.fixer.io/api/';
 export const GOODS = 'goods';
 export const GOODS_LIST = `${CURRENT_SERVER}/${GOODS}/`;
 export const AUTH = 'auth';

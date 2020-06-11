@@ -7,10 +7,12 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store';
 import 'materialize-css/dist/js/materialize.min';
+import LoaderTemplate from './components/loader/LoaderTemplate.vue';
 
 Vue.use(VueAxios, axios);
 
 Vue.use(Vuelidate);
+Vue.component('LoaderTemplate', LoaderTemplate);
 
 Vue.config.productionTip = false;
 

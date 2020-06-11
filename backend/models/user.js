@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 7,
+        minlength: 6,
         trim: true,
         validate(value) {
             if (value.toLowerCase().includes('password')) {
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        unique:true,
+        unique:false,
         required: true,
         minlength: 2,
         trim: true
@@ -29,6 +29,14 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'user'
+    },
+    rules: {
+        type: Boolean,
+        required: true,
+    },
+    bill: {
+        type: Number,
+        default: 1000,
     },
     tokens: [{
         token: {
