@@ -29,6 +29,7 @@ app.use(express.json())
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 app.use('/goods', router.goodsRouter);
 app.use('/auth', router.userRouter);
+app.use('/category', router.categoryRouter);
 
 app.use('/', (req, res) => {
     res.send(`server is on port ${port}`)

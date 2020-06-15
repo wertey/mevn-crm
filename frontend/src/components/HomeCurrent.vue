@@ -20,8 +20,8 @@
                 :key="cur"
             >
               <td>{{ cur }}</td>
-              <td>{ currency[cur] }</td>
-              <td>{{ currencyDate }}</td>
+              <td>{{ currency[cur] }}</td>
+              <td>{{ formatDate }}</td>
             </tr>
             </tbody>
           </table>
@@ -38,7 +38,6 @@ export default {
   name: 'HomeCurrent',
   data: () => ({
     currencies: ['RUB', 'USD', 'EUR', 'BYN'],
-    currencyDateDef: '',
   }),
   props: {
     date: {
@@ -51,22 +50,14 @@ export default {
     },
   },
   computed: {
-    currencyDate: {
-      get() {
-        return this.currencyDateDef;
-      },
-      set(data) {
-        this.currencyDateDef = data.moment().format('MMMM Do YYYY');
-      },
+    formatDate() {
+      return moment(this.date).format('MMMM Do YYYY, h:mm:ss a');
     },
   },
   methods: {
     moment() {
       return moment();
     },
-  },
-  beforeMount() {
-    console.log('currency', this.currency);
   },
 };
 </script>

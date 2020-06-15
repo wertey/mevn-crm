@@ -3,7 +3,9 @@
     <div class="page-title">
       <h3>Счет</h3>
 
-      <button class="btn waves-effect waves-light btn-small">
+      <button class="btn waves-effect waves-light btn-small"
+              @click="refreshCurrency"
+      >
         <i class="material-icons">refresh</i>
       </button>
     </div>
@@ -40,15 +42,31 @@ export default {
     HomeCurrent,
     HomeBill,
   },
+  methods: {
+    async refreshCurrency() {
+      this.loading = true;
+      await CurrencyApi.getFixerCurrency().then((resp) => {
+        this.loading = false;
+        this.currency = resp.data.rates;
+        this.date = resp.data.date;
+      })
+        .catch((e) => {
+          this.loading = false;
+          console.log(e);
+        });
+    },
+  },
   async mounted() {
+    this.loading = true;
     await CurrencyApi.getFixerCurrency().then((resp) => {
+      this.loading = false;
       this.currency = resp.data.rates;
       this.date = resp.data.date;
     })
       .catch((e) => {
+        this.loading = false;
         console.log(e);
       });
-    this.loading = false;
   },
 };
 </script>
