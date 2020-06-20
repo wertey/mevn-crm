@@ -5,8 +5,8 @@ const ObjectId = require('mongodb').ObjectID;
 
 class CategoryController {
     constructor(){}
-    getGoods = async (req, res) => {
-        PizzaList.find((err, docs) => {
+    getCategoryList = async (req, res) => {
+        CategoryList.find((err, docs) => {
             if (err) {
                 res.send(err);
             } else {
@@ -15,32 +15,25 @@ class CategoryController {
         })
     };
     newCategory = async (req, res) => {
-        const category = new CategoryList()
-        category.name = req.body.name,
-            category.limit = req.body.limit,
+            const category = new CategoryList()
+            category.name = req.body.name;
+            category.limit = req.body.limit;
+            category.id = req.body.id;
             category.save()
     };
     editCategory = async (req,res) => {
-            console.log('req', req.body.name);
-            CategoryList.find((err, docs) => {
-            console.log('docs');
-            // if (err) {
-            //     res.send(err);
-            // } else {
-            //     res.send(docs);
-            // }
-        })
-            // const idx = CategoryList.findIndex((item) => {
-            //     return item.id === parseInt(req.params.id)
-            // });
-            // console.log('idx', idx);
-            // CONTACTS[idx] = req.body.contact;
-            // res.json(CONTACTS[idx]);
+        console.log('req.query', req.body.oldname)
+        CategoryList.findOneAndUpdate({name: req.body.oldname}, {$set:{limit: req.body.limit, name: req.body.name}}, {new: true}, (err, doc) => {
+            if (err) {
+                console.log("Something wrong when updating data!");
+            }
+            console.log(doc);
+        });
     };
     deleteItem = async (req, res) => {
         const id = req.query.id;
         const o_id = new ObjectId(id);
-        PizzaList.deleteOne({ _id: o_id }, function(err, result) {
+        CategoryList.deleteOne({ _id: o_id }, function(err, result) {
             if (err) {
                 res.send('err');
             } else {

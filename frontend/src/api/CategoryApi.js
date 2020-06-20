@@ -9,11 +9,16 @@ export default {
     });
     return instWithCred.post('/newCategory', category);
   },
-  changeCategory(id, category) {
-    console.log('category', category);
+  changeCategory(oldname, name, limit) {
     const instWithCred = axios.create({
       baseURL: domains.CATEGORY_REQUEST,
     });
-    return instWithCred.patch(`contacts/${id}`, { category });
+    return instWithCred.patch(`editCategory/${oldname}`, { oldname, name, limit });
+  },
+  getCategoryList() {
+    const instWithCred = axios.create({
+      baseURL: domains.CATEGORY_REQUEST,
+    });
+    return instWithCred.get('/getCategoryList');
   },
 };

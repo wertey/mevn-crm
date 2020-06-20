@@ -5,7 +5,7 @@
     </div>
 
     <form class="form">
-      <div class="input-field" >
+      <div class="input-field">
         <select>
           <option
           >name cat</option>

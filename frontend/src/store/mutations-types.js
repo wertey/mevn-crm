@@ -1,3 +1,4 @@
 export const SET_USER_NAME = 'SET_USER_NAME';
+export const GET_CATEGORY_LIST = 'GET_CATEGORY_LIST';
 
-export default 'SET_USER_NAME';
+export default 'SET_USER_NAME, GET_CATEGORY_LIST';
