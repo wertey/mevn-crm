@@ -19,6 +19,7 @@ class UserController {
         }
     };
     updateUser = async (req, res) => {
+        console.log('res.body', req.body)
         try {
             const result = await service.update(req);
             res.status(201).send(result)

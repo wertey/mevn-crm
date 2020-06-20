@@ -22,7 +22,6 @@ class CategoryController {
             category.save()
     };
     editCategory = async (req,res) => {
-        console.log('req.query', req.body.oldname)
         CategoryList.findOneAndUpdate({name: req.body.oldname}, {$set:{limit: req.body.limit, name: req.body.name}}, {new: true}, (err, doc) => {
             if (err) {
                 console.log("Something wrong when updating data!");

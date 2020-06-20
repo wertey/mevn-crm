@@ -4,11 +4,14 @@
       <h3>Профиль</h3>
     </div>
 
-    <form class="form">
+    <form class="form"
+          @submit.prevent="updateName"
+    >
       <div class="input-field">
         <input
           id="description"
           type="text"
+          v-model="name"
         >
         <label for="description">Имя</label>
         <span
@@ -25,10 +28,23 @@
 
 <script>
 import localStorageToken from '../mixins/localStorageToken';
+import UserApi from '../api/UserApi';
 
 export default {
   name: 'Proflie',
   mixins: [localStorageToken],
+  data: () => ({
+    name: '',
+  }),
+  methods: {
+    updateName() {
+      const oldName = this.name;
+      UserApi.updateUserName(oldName, this.name);
+    },
+  },
+  beforeMount() {
+    this.name = this.$store.getters.info.name;
+  },
 };
 </script>
 
