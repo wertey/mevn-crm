@@ -20,4 +20,16 @@ export default {
     });
     return instWithCred.post('login', { email, password });
   },
+  updateUserName(oldName, newName) {
+    const token = JSON.parse(localStorage.getItem('token'));
+    console.log('oldName', oldName);
+    console.log('name', newName);
+    const instWithCred = axios.create({
+      baseURL: domains.USER_UPDATE_NAME,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return instWithCred.patch(`updateName/${oldName}`, { newName });
+  },
 };

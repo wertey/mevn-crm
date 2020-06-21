@@ -38,6 +38,9 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 1000,
     },
+    records: {
+      type: Object,
+    },
     tokens: [{
         token: {
             type: String,

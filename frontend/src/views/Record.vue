@@ -4,9 +4,12 @@
       <h3>Новая запись</h3>
     </div>
 
-    <form class="form" v-if="categories.length">
+    <form class="form"
+          v-if="categories.length"
+          @submit.prevent="submitHandler"
+    >
       <div>
-        <select>
+        <select  v-model="category">
           <option v-for="item in categories"
                   :key="item.name"
           >
@@ -23,6 +26,7 @@
             name="type"
             type="radio"
             value="income"
+            v-model="type"
           />
           <span>Доход</span>
         </label>
@@ -35,6 +39,7 @@
             name="type"
             type="radio"
             value="outcome"
+            v-model="type"
           />
           <span>Расход</span>
         </label>
@@ -44,25 +49,45 @@
         <input
           id="amount"
           type="number"
+          v-model.number="amount"
+          :class="{invalid: ($v.amount.$dirty && $v.amount.required)
+          || ($v.amount.$dirty && $v.amount.amount)}"
         >
         <label for="amount">Сумма</label>
-        <span class="helper-text invalid">amount пароль</span>
+        <small class="helper-text invalid"
+              v-if="$v.amount.$dirty && !$v.amount.required"
+        >Введите сумму</small>
       </div>
 
       <div class="input-field">
         <input
           id="description"
           type="text"
+          v-model="description"
+          :class="{invalid: ($v.description.$dirty && $v.description.required)
+          || ($v.description.$dirty && $v.description.description)}"
         >
         <label for="description">Описание</label>
-        <span
-          class="helper-text invalid">description пароль</span>
+        <small
+          class="helper-text invalid"
+          v-if="$v.description.$dirty && !$v.description.required"
+        >Необходимо описать</small>
+        <small class="helper-text invalid"
+               v-else-if="$v.description.$dirty && !$v.description.minLength"
+        >Поле Password должно содержать минимум
+          {{ $v.description.$params.minLength.min }}
+          символов. Сейчас он
+          {{ description.length }}
+        </small>
       </div>
 
       <button class="btn waves-effect waves-light" type="submit">
         Создать
         <i class="material-icons right">send</i>
       </button>
+      <div v-if="message">
+        Недостаточно средств в счете {{ this.amount - this.info.bill }}
+      </div>
     </form>
     <div v-else>
       <p>Категорий пока нету. Создайте первую категорию</p>
@@ -78,19 +103,54 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
+import { required, minLength } from 'vuelidate/lib/validators';
 import localStorageToken from '../mixins/localStorageToken';
 import CategoryApi from '../api/CategoryApi';
 
 export default {
   name: 'Record',
   mixins: [localStorageToken],
+  data: () => ({
+    category: [],
+    type: 'outcome',
+    amount: 1,
+    description: '',
+    message: false,
+  }),
+  validations: {
+    amount: { required },
+    description: { required, minLength: minLength(6) },
+  },
   computed: {
-    ...mapGetters({ categories: 'categoryList' }),
+    ...mapGetters({ categories: 'categoryList', info: 'info' }),
+    canCreateRecord() {
+      console.log('test');
+      if (this.type === 'income') {
+        return true;
+      }
+      return +this.info.bill >= this.amount;
+    },
   },
   methods: {
     ...mapMutations(['GET_CATEGORY_LIST']),
     createCategory() {
       this.$router.push('/categories');
+    },
+    // eslint-disable-next-line consistent-return
+    submitHandler() {
+      console.log('submit');
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return false;
+      }
+      if (this.canCreateRecord) {
+        console.log('ok');
+      } else {
+        this.message = true;
+        setTimeout(() => {
+          this.message = false;
+        }, 3000);
+      }
     },
   },
   beforeMount() {
@@ -98,8 +158,8 @@ export default {
       .then((res) => {
         const { data } = res;
         this.GET_CATEGORY_LIST(data);
+        this.category = this.categories[0].name;
       });
-    console.log('categories', this.categories);
   },
 };
 </script>
