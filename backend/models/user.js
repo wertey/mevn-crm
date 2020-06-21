@@ -38,8 +38,13 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 1000,
     },
+    categories: {
+        type: Array,
+        default: [],
+    },
     records: {
-      type: Object,
+        type: Object,
+        default: {},
     },
     tokens: [{
         token: {

@@ -130,6 +130,7 @@ export default {
         rules: this.rule,
         bill: 1000,
         records: {},
+        categories: [],
       };
       userApi.sendSignUp(formData).then(() => {
         this.token = generateUniqueId({
