@@ -28,36 +28,39 @@ class UserController {
         })
     };
     editCategory = async (req,res) => {
-        User.findOneAndUpdate({_id: userId,
-            'chapters.sections':{$elemMatch: {id:sectionId}}},
-            {$set: {'chapters.sections.$.active': false}}).exec(function (err, doc) {console.log(doc)});
+        console.log('wertey')
+        console.log('id', req.params.id);
+        console.log('res.categoryId', req.body.categoryId)
+        User.findOneAndUpdate({_id: req.params.id,
+            'categories': { $elemMatch: { id: req.body.categoryId }}},
+            {$set: {'categories.$.name': req.body.name, 'categories.$.limit': req.body.limit}}).exec(function (err, doc) {console.log(doc)});
         // https://stackoverflow.com/questions/38047156/update-field-of-object-in-array-of-array-with-mongoose
-        User.findOneAndUpdate(
-            {
-                _id: req.params.id,
-                $set: {
-                    categories: [{
-                        id: req.body.lockId,
-                        admin: req.body.isAdmin
-                    }]
-                }
-            },
-            { new: true },
-            function(err, user) {
-                if (err) {
-                    return res.status(500).send({
-                        message: err.message || "Some error occured while updating user"
-                    });
-                }
-                if (!user) {
-                    return res.status(404).send({
-                        message: "User not found"
-                    });
-                }
-
-                return res.status(200).send(user);
-            }
-        );
+        // User.findOneAndUpdate(
+        //     {
+        //         _id: req.params.id,
+        //         $set: {
+        //             categories: [{
+        //                 id: req.body.lockId,
+        //                 admin: req.body.isAdmin
+        //             }]
+        //         }
+        //     },
+        //     { new: true },
+        //     function(err, user) {
+        //         if (err) {
+        //             return res.status(500).send({
+        //                 message: err.message || "Some error occured while updating user"
+        //             });
+        //         }
+        //         if (!user) {
+        //             return res.status(404).send({
+        //                 message: "User not found"
+        //             });
+        //         }
+        //
+        //         return res.status(200).send(user);
+        //     }
+        // );
     };
 }
 

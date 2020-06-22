@@ -10,11 +10,11 @@ export default {
     });
     return instWithCred.post('/newCategory', { id, category });
   },
-  changeCategory(categoryId, name, limit) {
+  changeCategory(userId, categoryId, name, limit) {
     const instWithCred = axios.create({
       baseURL: domains.CATEGORY_REQUEST,
     });
-    return instWithCred.patch(`editCategory/${categoryId}`, { name, limit });
+    return instWithCred.patch(`editCategory/${userId}`, { categoryId, name, limit });
   },
   getCategoryList() {
     const instWithCred = axios.create({

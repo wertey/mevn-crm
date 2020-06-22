@@ -96,11 +96,13 @@ export default {
         return false;
       }
       const user = this.$store.getters.info;
+      // eslint-disable-next-line no-underscore-dangle
+      const userId = this.$store.getters.info._id;
       console.log('user', user);
       const item = user.categories.find((el) => el.name === this.oldCategoryName);
       const categoryId = item.id;
       console.log('categoryId', categoryId);
-      CategoryApi.changeCategory(categoryId, this.name, this.limit);
+      CategoryApi.changeCategory(userId, categoryId, this.name, this.limit);
       CategoryApi.getCategoryList()
         .then((res) => {
           this.GET_CATEGORY_LIST(res.data[0].categories);
