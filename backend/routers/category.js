@@ -1,11 +1,11 @@
 const express = require('express');
-const CategoryController = require('../controllers/category-controllers');
-const category_controller = new CategoryController();
+const UserController = require('../controllers/category-controllers');
+const user_controller = new UserController();
 const router = new express.Router();
 
-router.get('/getCategoryList', category_controller.getCategoryList);
-router.post('/newCategory', category_controller.newCategory);
-router.patch('/editCategory/:oldname', category_controller.editCategory)
-// router.delete('/deleteCategory', category_controller.deleteCategory);
+router.get('/getCategoryList', user_controller.getCategoryList);
+router.post('/newCategory', user_controller.newCategory);
+router.patch('/editCategory/:id', user_controller.editCategory)
+// router.delete('/deleteCategory', user_controller.deleteCategory);
 
 module.exports = router;

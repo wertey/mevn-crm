@@ -2,7 +2,6 @@ const service = require('../services/user-services');
 class UserController {
     constructor(){}
     addUser = async (req, res) => {
-        console.log('addUser', req.body);
         try {
             const result = await service.add(req);
             res.status(201).send(result)

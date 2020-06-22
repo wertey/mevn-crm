@@ -87,6 +87,7 @@ export default {
     ...mapMutations(['GET_CATEGORY_LIST']),
     selectedItem(e) {
       this.oldCategoryName = e.target.value;
+      console.log('this.oldCategoryName ', this.oldCategoryName);
     },
     // eslint-disable-next-line consistent-return
     updateCategory() {
@@ -94,12 +95,15 @@ export default {
         this.$v.$touch();
         return false;
       }
-      console.log('oldCategoryName', this.oldCategoryName);
-      CategoryApi.changeCategory(this.oldCategoryName, this.name, this.limit);
+      const user = this.$store.getters.info;
+      console.log('user', user);
+      const item = user.categories.find((el) => el.name === this.oldCategoryName);
+      const categoryId = item.id;
+      console.log('categoryId', categoryId);
+      CategoryApi.changeCategory(categoryId, this.name, this.limit);
       CategoryApi.getCategoryList()
         .then((res) => {
-          const { data } = res;
-          this.GET_CATEGORY_LIST(data);
+          this.GET_CATEGORY_LIST(res.data[0].categories);
         });
       this.updated = true;
       setTimeout(() => {
@@ -112,8 +116,7 @@ export default {
   beforeMount() {
     CategoryApi.getCategoryList()
       .then((res) => {
-        const { data } = res;
-        this.GET_CATEGORY_LIST(data);
+        this.GET_CATEGORY_LIST(res.data[0].categories);
       });
     console.log('categories', this.categories);
   },

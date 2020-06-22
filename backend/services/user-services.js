@@ -17,7 +17,6 @@ const update = async function(req){
 
 const login = async function(req){
     const user = await User.findByCredentials(req.body.email, req.body.password);
-    console.log('user', user)
     const token = await user.generateAuthToken();
     return {user, token}
 };

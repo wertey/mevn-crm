@@ -1,19 +1,20 @@
 import axios from 'axios';
+// eslint-disable-next-line no-unused-vars
+import store from '../store/index';
 import * as domains from './domain';
 
 export default {
-  addNewCategory(category) {
-    console.log('category', category);
+  addNewCategory(id, category) {
     const instWithCred = axios.create({
       baseURL: domains.CATEGORY_REQUEST,
     });
-    return instWithCred.post('/newCategory', category);
+    return instWithCred.post('/newCategory', { id, category });
   },
-  changeCategory(oldname, name, limit) {
+  changeCategory(categoryId, name, limit) {
     const instWithCred = axios.create({
       baseURL: domains.CATEGORY_REQUEST,
     });
-    return instWithCred.patch(`editCategory/${oldname}`, { oldname, name, limit });
+    return instWithCred.patch(`editCategory/${categoryId}`, { name, limit });
   },
   getCategoryList() {
     const instWithCred = axios.create({

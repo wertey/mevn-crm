@@ -74,16 +74,17 @@ export default {
         this.$v.$touch();
         return false;
       }
+      // eslint-disable-next-line no-underscore-dangle
+      const userId = this.$store.getters.info._id;
       const category = {
         id: this.id,
         name: this.name,
         limit: this.limit,
       };
-      CategoryApi.addNewCategory(category);
+      CategoryApi.addNewCategory(userId, category);
       CategoryApi.getCategoryList()
         .then((res) => {
-          const { data } = res;
-          this.GET_CATEGORY_LIST(data);
+          this.GET_CATEGORY_LIST(res.data[0].categories);
         });
       this.created = true;
       setTimeout(() => {

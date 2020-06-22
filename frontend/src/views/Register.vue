@@ -128,10 +128,11 @@ export default {
         password: this.password,
         name: this.name,
         rules: this.rule,
-        bill: 1000,
+        bill: 10000,
         records: {},
         categories: [],
       };
+      console.log('formdata', formData);
       userApi.sendSignUp(formData).then(() => {
         this.token = generateUniqueId({
           includeSymbols: ['@', '#', '|'],

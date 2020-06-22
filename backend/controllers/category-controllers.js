@@ -1,12 +1,12 @@
-const Category = require('../models/category');
 const mongoose = require('mongoose');
-const CategoryList = mongoose.model('Category');
+const User = mongoose.model('User');
+const user = require('../models/user');
 const ObjectId = require('mongodb').ObjectID;
 
-class CategoryController {
+class UserController {
     constructor(){}
     getCategoryList = async (req, res) => {
-        CategoryList.find((err, docs) => {
+        User.find((err, docs) => {
             if (err) {
                 res.send(err);
             } else {
@@ -15,31 +15,50 @@ class CategoryController {
         })
     };
     newCategory = async (req, res) => {
-            const category = new CategoryList()
-            category.name = req.body.name;
-            category.limit = req.body.limit;
-            category.id = req.body.id;
-            category.save()
+        const id = req.body.id;
+        const category = req.body.category
+        User.findById((id), (err,user) => {
+            if (err) {
+                res.send(err)
+            } else {
+                user.categories.push(category)
+                user.save()
+                res.send(user);
+            }
+        })
     };
     editCategory = async (req,res) => {
-        CategoryList.findOneAndUpdate({name: req.body.oldname}, {$set:{limit: req.body.limit, name: req.body.name}}, {new: true}, (err, doc) => {
-            if (err) {
-                console.log("Something wrong when updating data!");
+        User.findOneAndUpdate({_id: userId,
+            'chapters.sections':{$elemMatch: {id:sectionId}}},
+            {$set: {'chapters.sections.$.active': false}}).exec(function (err, doc) {console.log(doc)});
+        // https://stackoverflow.com/questions/38047156/update-field-of-object-in-array-of-array-with-mongoose
+        User.findOneAndUpdate(
+            {
+                _id: req.params.id,
+                $set: {
+                    categories: [{
+                        id: req.body.lockId,
+                        admin: req.body.isAdmin
+                    }]
+                }
+            },
+            { new: true },
+            function(err, user) {
+                if (err) {
+                    return res.status(500).send({
+                        message: err.message || "Some error occured while updating user"
+                    });
+                }
+                if (!user) {
+                    return res.status(404).send({
+                        message: "User not found"
+                    });
+                }
+
+                return res.status(200).send(user);
             }
-            console.log(doc);
-        });
-    };
-    deleteItem = async (req, res) => {
-        const id = req.query.id;
-        const o_id = new ObjectId(id);
-        CategoryList.deleteOne({ _id: o_id }, function(err, result) {
-            if (err) {
-                res.send('err');
-            } else {
-                res.send('result');
-            }
-        });
+        );
     };
 }
 
-module.exports = CategoryController;
+module.exports = UserController;
