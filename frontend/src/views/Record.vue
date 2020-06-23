@@ -106,6 +106,7 @@ import { mapGetters, mapMutations } from 'vuex';
 import { required, minLength } from 'vuelidate/lib/validators';
 import localStorageToken from '../mixins/localStorageToken';
 import CategoryApi from '../api/CategoryApi';
+import UserApi from '../api/UserApi';
 
 export default {
   name: 'Record',
@@ -144,7 +145,16 @@ export default {
         return false;
       }
       if (this.canCreateRecord) {
-        console.log('ok');
+        const record = {
+          amount: this.amount,
+          description: this.description,
+          date: Date.now(),
+          type: this.type,
+        };
+        // eslint-disable-next-line no-underscore-dangle
+        const userId = this.$store.getters.info._id;
+        console.log('userIduserIduserId', userId);
+        UserApi.updateBill(userId, this.amount, record);
       } else {
         this.message = true;
         setTimeout(() => {
@@ -157,8 +167,8 @@ export default {
     CategoryApi.getCategoryList()
       .then((res) => {
         const { data } = res;
-        this.GET_CATEGORY_LIST(data);
-        this.category = this.categories[0].name;
+        console.log('data', data[0].bill);
+        this.GET_CATEGORY_LIST(data[0].categories);
       });
   },
 };

@@ -129,7 +129,7 @@ export default {
         name: this.name,
         rules: this.rule,
         bill: 10000,
-        records: {},
+        records: [],
         categories: [],
       };
       console.log('formdata', formData);

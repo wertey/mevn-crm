@@ -14,5 +14,6 @@ router.post('/login', user_controller.login);
 router.get('/me',auth, user_controller.profile);
 router.post('/logout',auth, user_controller.logout);
 router.patch('/updateName/:name', auth, user_controller.updateUser);
+router.patch('/upDateBill/:id', auth, user_controller.upDateBill);
 
 module.exports = router;

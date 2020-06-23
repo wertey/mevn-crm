@@ -56,6 +56,10 @@ class UserController {
         } catch (e) {
             res.status(400).send({error:e.message})
         }
+    };
+    upDateBill = async (req,res) => {
+        console.log('wertey');
+        console.log('res', res.body);
     }
 }
 
