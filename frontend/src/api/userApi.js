@@ -32,4 +32,13 @@ export default {
     });
     return instWithCred.patch(`updateName/${oldName}`, { newName });
   },
+  updateBill(userId, bill, record) {
+    console.log('userId', userId);
+    console.log('bill', bill);
+    console.log('record', record);
+    const instWithCred = axios.create({
+      baseURL: domains.USER_UPDATE_NAME,
+    });
+    return instWithCred.patch(`updateBill/${userId}`, { bill, record });
+  },
 };

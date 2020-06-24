@@ -125,7 +125,6 @@ export default {
   computed: {
     ...mapGetters({ categories: 'categoryList', info: 'info' }),
     canCreateRecord() {
-      console.log('test');
       if (this.type === 'income') {
         return true;
       }
@@ -139,7 +138,6 @@ export default {
     },
     // eslint-disable-next-line consistent-return
     submitHandler() {
-      console.log('submit');
       if (this.$v.$invalid) {
         this.$v.$touch();
         return false;
@@ -153,8 +151,18 @@ export default {
         };
         // eslint-disable-next-line no-underscore-dangle
         const userId = this.$store.getters.info._id;
-        console.log('userIduserIduserId', userId);
-        UserApi.updateBill(userId, this.amount, record);
+        if (this.type === 'income') {
+          console.log('income');
+          console.log('this.$store.getters.info', this.$store.getters.info);
+          this.bill = this.$store.getters.info.bill + this.amount;
+        } else {
+          console.log('outcome');
+          this.bill = this.$store.getters.info.bill - this.amount;
+          if (this.bill < 0) {
+            this.bill = 0;
+          }
+        }
+        UserApi.updateBill(userId, this.bill, record);
       } else {
         this.message = true;
         setTimeout(() => {

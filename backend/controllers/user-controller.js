@@ -1,4 +1,7 @@
 const service = require('../services/user-services');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const user = require('../models/user');
 class UserController {
     constructor(){}
     addUser = async (req, res) => {
@@ -59,7 +62,19 @@ class UserController {
     };
     upDateBill = async (req,res) => {
         console.log('wertey');
-        console.log('res', res.body);
+        const record = req.body.record
+        const id = req.params.id
+        console.log('res', req.body);
+        User.findById((id), (err,user) => {
+            if (err) {
+                res.send(err)
+            } else {
+                user.bill = req.body.bill;
+                user.records.push(record)
+                user.save()
+                res.send(user);
+            }
+        })
     }
 }
 
