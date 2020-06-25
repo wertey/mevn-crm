@@ -74,7 +74,7 @@
         >Необходимо описать</small>
         <small class="helper-text invalid"
                v-else-if="$v.description.$dirty && !$v.description.minLength"
-        >Поле Password должно содержать минимум
+        >Поле Description должно содержать минимум
           {{ $v.description.$params.minLength.min }}
           символов. Сейчас он
           {{ description.length }}
