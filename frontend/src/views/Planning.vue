@@ -28,6 +28,17 @@ import localStorageToken from '../mixins/localStorageToken';
 export default {
   name: 'Planning',
   mixins: [localStorageToken],
+  data: () => ({
+    loading: true,
+    categories: [],
+  }),
+  async mounted() {
+    const records = await this.$store.dispatch('fetchRecords');
+    const categories = await this.$store.dispatch('fetchCategories');
+    console.log('records', records);
+    console.log('categories', categories);
+    this.loading = false;
+  },
 };
 </script>
 
